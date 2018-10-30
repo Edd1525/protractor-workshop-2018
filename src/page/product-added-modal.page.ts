@@ -4,7 +4,7 @@ export class ProductAddedPage {
   constructor() {
     this.acceptProdutsBtn = $('[style*="display: block;"] .button-container > a');
   }
-  public closeModal(): promise.Promise<void> {
-    return this.acceptProdutsBtn.click();
+  public async closeModal(): Promise<void> {
+    await this.acceptProdutsBtn.click();
   }
 }

@@ -4,7 +4,7 @@ export class MenuContentPage {
   constructor() {
     this.tShirtMenu = $('#block_top_menu > ul > li:nth-child(3) > a');
   }
-  public goToTShirtMenu(): promise.Promise<void> {
-    return this.tShirtMenu.click();
+  public async goToTShirtMenu(): Promise<void> {
+    await this.tShirtMenu.click();
   }
 }

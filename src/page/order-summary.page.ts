@@ -4,7 +4,7 @@ export class OrderSummaryPage {
   constructor() {
     this.acceptBtn = $('.cart_navigation span');
   }
-  public goToSummary(): promise.Promise<void> {
-    return this.acceptBtn.click();
+  public async goToSummary(): Promise<void> {
+    await this.acceptBtn.click();
   }
 }

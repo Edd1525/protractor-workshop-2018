@@ -4,7 +4,7 @@ export class ShippingStepPage {
   constructor() {
     this.shippingBtn = $('#cgv');
   }
-  public shippingStep(): promise.Promise<void> {
-    return this.shippingBtn.click();
+  public async shippingStep(): Promise<void> {
+    await this.shippingBtn.click();
   }
 }

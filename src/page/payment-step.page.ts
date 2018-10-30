@@ -4,7 +4,7 @@ export class PaymentStepPage {
   constructor() {
     this.paymentBtn = $('#form > p > button > span');
   }
-  public paymentStep(): promise.Promise<void> {
-    return this.paymentBtn.click();
+  public async paymentStep(): Promise<void> {
+    await this.paymentBtn.click();
   }
 }

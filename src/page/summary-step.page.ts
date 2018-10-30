@@ -6,10 +6,10 @@ export class SummaryStepPage {
     this.buyBtn = $('#cart_navigation > button > span');
     this.textContainer = $('#center_column > div > p > strong');
   }
-  public goToSummary(): promise.Promise<void> {
-    return this.buyBtn.click();
+  public async goToSummary(): Promise<void> {
+    await this.buyBtn.click();
   }
-  public getText(): promise.Promise<string> {
+  public async getText(): Promise<string> {
     return this.textContainer.getText();
   }
 }

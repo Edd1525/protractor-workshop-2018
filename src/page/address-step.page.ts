@@ -5,7 +5,7 @@ export class AddressStepPage {
   constructor() {
     this.button = $('#center_column > form > p > button > span');
   }
-  public addressStep(): promise.Promise<void> {
-    return this.button.click();
+  public async addressStep(): Promise<void> {
+    await this.button.click();
   }
 }
