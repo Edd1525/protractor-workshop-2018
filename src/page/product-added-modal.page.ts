@@ -7,4 +7,8 @@ export class ProductAddedPage {
   public async closeModal(): Promise<void> {
     await this.acceptProdutsBtn.click();
   }
+
+  public getButton(): ElementFinder {
+    return this.acceptProdutsBtn;
+  }
 }
