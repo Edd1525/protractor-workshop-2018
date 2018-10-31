@@ -1,10 +1,10 @@
-import { $, ElementFinder, promise } from 'protractor';
+import { $, ElementFinder } from 'protractor';
 export class ShippingStepPage {
   private shippingBtn: ElementFinder;
   constructor() {
     this.shippingBtn = $('#cgv');
   }
-  public shippingStep(): promise.Promise<void> {
-    return this.shippingBtn.click();
+  public async shippingStep(): Promise<void> {
+    await this.shippingBtn.click();
   }
 }
