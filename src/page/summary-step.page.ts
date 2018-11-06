@@ -3,8 +3,8 @@ export class SummaryStepPage {
   private buyBtn: ElementFinder;
   private textContainer: ElementFinder;
   constructor() {
-    this.buyBtn = $('#cart_navigation > button > span');
-    this.textContainer = $('#center_column > div > p > strong');
+    this.buyBtn = $('#cart_navigation > button');
+    this.textContainer = $('.cheque-indent');
   }
   public async goToSummary(): Promise<void> {
     await this.buyBtn.click();

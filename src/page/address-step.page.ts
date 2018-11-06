@@ -3,7 +3,7 @@ import { $, ElementFinder } from 'protractor';
 export class AddressStepPage {
   private button: ElementFinder;
   constructor() {
-    this.button = $('#center_column > form > p > button > span');
+    this.button = $('.cart_navigation button');
   }
   public async addressStep(): Promise<void> {
     await this.button.click();
