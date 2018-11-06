@@ -1,14 +1,16 @@
-import { $, ElementFinder } from 'protractor';
+import { $, ElementFinder, ExpectedConditions, browser } from 'protractor';
 export class ProductAddedPage {
-  private acceptProdutsBtn: ElementFinder;
+  private acceptProductsBtn: ElementFinder;
   constructor() {
-    this.acceptProdutsBtn = $('[style*="display: block;"] .button-container > a');
+    this.acceptProductsBtn = $('[style*="display: block;"] .button-container > a');
   }
   public async closeModal(): Promise<void> {
-    await this.acceptProdutsBtn.click();
+    await this.acceptProductsBtn.click();
   }
 
-  public getButton(): ElementFinder {
-    return this.acceptProdutsBtn;
+  public async getButton(): Promise<void> {
+    await browser.wait(
+      ExpectedConditions.visibilityOf(this.acceptProductsBtn), 3000, 'accept button');
+    return this.acceptProductsBtn;
   }
 }
