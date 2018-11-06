@@ -1,4 +1,5 @@
-import { browser, ExpectedConditions } from 'protractor';
+import { browser } from 'protractor';
+
 import {
   AddressStepPage,
   BankPaymentPage,
@@ -24,25 +25,45 @@ describe('Buy a t-shirt', () => {
   const signInStepPage: SignInStepPage = new SignInStepPage();
   const summaryStepPage: SummaryStepPage = new SummaryStepPage();
 
-  beforeEach(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 120000;
-  });
+  describe('Open page', async () => {
+    beforeAll(async () => {
+      await browser.get('http://automationpractice.com/');
+    });
 
-  it('then should be bought a t-shirt', async () => {
-    await browser.get('http://automationpractice.com/');
-    await menuContentPage.goToTShirtMenu();
-    await productListPage.selectProduct();
-    await browser.wait(ExpectedConditions.elementToBeClickable(productAddedPage.getButton()), 5000);
-    await productAddedPage.closeModal();
-    await orderSummaryPage.goToSummary();
-    await signInStepPage.sendLogin('aperdomobo@gmail.com', 'WorkshopProtractor');
-    await addressStepPage.addressStep();
-    await shippingStepPage.shippingStep();
-    await paymentStepPage.paymentStep();
-    await bankPaymentPage.bankPayment();
-    await summaryStepPage.goToSummary();
+    describe('Add t-shirt to cart', async () => {
+      beforeAll(async () => {
+        await menuContentPage.goToTShirtMenu();
+        await productListPage.selectProduct();
+        await productAddedPage.getButton();
+        await productAddedPage.closeModal();
+        await orderSummaryPage.goToSummary();
+      });
 
-    await expect(summaryStepPage.getText())
-      .toBe('Your order on My Store is complete.');
+      describe('Login', async () => {
+        beforeAll(async () => {
+          await signInStepPage.sendLogin('aperdomobo@gmail.com', 'WorkshopProtractor');
+        });
+
+        describe('Choose address', async () => {
+          beforeAll(async () => {
+            await addressStepPage.addressStep();
+            await shippingStepPage.shippingStep();
+          });
+
+          describe('Execute payment', async () => {
+            beforeAll(async () => {
+              await paymentStepPage.paymentStep();
+              await bankPaymentPage.bankPayment();
+              await summaryStepPage.goToSummary();
+            });
+
+            it('then the order should be success', async () => {
+              await expect(summaryStepPage.getText())
+                .toBe('Your order on My Store is complete.');
+            });
+          });
+        });
+      });
+    });
   });
 });
