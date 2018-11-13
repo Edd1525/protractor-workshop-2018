@@ -10,4 +10,5 @@ export { ShippingStepPage } from './shipping-step.page';
 export { SignInStepPage } from './sign-in-step.page';
 export { SummaryStepPage } from './summary-step.page';
 export { PersonalInformationPage } from './personal-information.page';
+export { DownloadService } from './../service/download.service';
 export { IFramePage } from './i-frame.page';

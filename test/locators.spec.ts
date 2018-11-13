@@ -1,5 +1,6 @@
 import { browser } from 'protractor';
 import { PersonalInformationPage } from '../src/page';
+import { DownloadService } from '../src/service/download.service';
 
 describe('Send personal information form', () => {
   const personalInformationPage: PersonalInformationPage = new PersonalInformationPage();
@@ -37,6 +38,12 @@ describe('Send personal information form', () => {
     it('Should have filename', async () => {
       const filename = await personalInformationPage.getFilename();
       expect(filename.indexOf('DIM.jpg')).toBeGreaterThan(-1);
+    });
+
+    it('then should be created a file', async () => {
+      const service = new DownloadService();
+      const file = await service.readFileFromTemp('test-document.xlsx');
+      expect(file.byteLength).toBeGreaterThanOrEqual(8000);
     });
   });
 });
