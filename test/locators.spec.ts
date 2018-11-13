@@ -9,7 +9,7 @@ describe('Send personal information form', () => {
     await browser.get('http://toolsqa.com/automation-practice-form/');
   });
 
-  describe('When a new personal information is sent', () => {
+  describe('When I fill all the information', () => {
     beforeAll(async () => {
       await personalInformationPage.fillForm({
         firstName: 'Alejandro',
@@ -19,8 +19,7 @@ describe('Send personal information form', () => {
         profession: ['Automation Tester'],
         tools: ['Selenium Webdriver'],
         continent: 'South America',
-        file: './resources/logo.png',
-        downloadFile: true,
+        file: './resources/DIM.jpg',
         commands: [
           'Browser Commands',
           'Navigation Commands',
@@ -31,14 +30,14 @@ describe('Send personal information form', () => {
       });
     });
 
-    it('Should response with title', async () => {
+    it('And the title is verified', async () => {
       await expect(personalInformationPage.getResponse())
         .toBe('Practice Automation Form');
     });
 
     it('Should have filename', async () => {
       const filename = await personalInformationPage.getFilename();
-      expect(filename.indexOf('logo.png')).toBeGreaterThan(-1);
+      expect(filename.indexOf('DIM.jpg')).toBeGreaterThan(-1);
     });
 
     it('then should be created a file', async () => {
