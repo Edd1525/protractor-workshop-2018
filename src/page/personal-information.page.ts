@@ -1,71 +1,84 @@
-import { element, by, ElementFinder } from 'protractor';
+import { browser, element, by, ElementFinder, ElementArrayFinder } from 'protractor';
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+import * as remote from 'selenium-webdriver/remote';
 
 export class PersonalInformationPage {
   private firstName: ElementFinder;
   private lastName: ElementFinder;
-  private date: ElementFinder;
-  private sendButton: ElementFinder;
-  private pageTitle: ElementFinder;
+  private submitBtn: ElementFinder;
+  private textContainer: ElementFinder;
+  private commandOptions: ElementArrayFinder;
+  private uploadPhoto: ElementFinder;
 
   constructor () {
     this.firstName = element(by.name('firstname'));
     this.lastName = element(by.name('lastname'));
-    this.date = element(by.id('datepicker'));
-    this.sendButton = element(by.id('submit'));
-    this.pageTitle = element(by.id('content')).element(by.tagName('h1'));
+    this.submitBtn = element(by.id('submit'));
+    this.textContainer = element(by.css('.wpb_text_column.wpb_content_element h1'));
+    this.commandOptions = element.all(by.css('#selenium_commands option'));
+    this.uploadPhoto = element(by.id('photo'));
   }
 
-  private setSex(gender:string) {
-    return element(by.css(`[name="sex"][value="${gender}"]`));
+  private async selectSex(sex: string): Promise<void> {
+    await element(by.css(`input[value="${sex}"]`)).click();
   }
 
-  private setYearsOfExperience(years:number) {
-    return element(by.css(`[name="exp"][value="${years}"]`));
+  private async selectExperience(experience: string): Promise<void> {
+    await element(by.css(`input[value="${experience}"]`)).click();
   }
 
-  private setProfession(profession:string) {
-    return element.all(by.css(`[name="profession"][value="${profession}"]`));
+  private async selectProfessions(professions: string[]): Promise<void> {
+    for (const profession of professions) {
+      await element(by.css(`input[value="${profession}"]`)).click();
+    }
   }
 
-  private setAutomationTool(autool:string) {
-    return element(by.css(`[name="tool"][value="${autool}"]`));
+  private async selectTools(tools: string[]): Promise<void> {
+    for (const tool of tools) {
+      await element(by.css(`input[value="${tool}"]`)).click();
+    }
   }
 
-  private setContinent(continent:string) {
-    return element(by.id('continents')).element(by.cssContainingText('option', continent));
-  }
-
-  private setSeleniumCommand(selcommand:string) {
-    return element(by.id('selenium_commands')).element(by.cssContainingText('option', selcommand));
-  }
-
-  public async getPageTitle(): Promise<string> {
-    return await this.pageTitle.getText();
-  }
-
-  public async fillForm(information): Promise<void> {
-    await this.firstName.sendKeys(information.firstName);
-    await this.lastName.sendKeys(information.lastName);
-    await this.date.sendKeys('10/10/2018');
-    await this.setSex(information.sex).click();
-    await this.setYearsOfExperience(information.experience).click();
-
-    await information.profession.forEach(async (element) => {
-      await this.setProfession(element);
-    });
-
-    await information.tools.forEach(async (element) => {
-      await this.setAutomationTool(element);
-    });
-
-    await this.setContinent(information.continent).click();
-
-    information.commands.forEach(async (element) => {
-      await this.setSeleniumCommand(element);
+  private async selectCommands(commands: string[]): Promise<void> {
+    await this.commandOptions.each(async (element: ElementFinder) => {
+      if (commands.indexOf(await element.getText()) !== -1) {
+        await element.click();
+      }
     });
   }
 
-  public async sendForm(): Promise<void> {
-    await this.sendButton.click();
+  private async uploadFile(relativePath: string): Promise<void> {
+    const fullPath = resolve(process.cwd(), relativePath);
+
+    if (existsSync(fullPath)) {
+      await browser.setFileDetector(new remote.FileDetector());
+      await this.uploadPhoto.sendKeys(fullPath);
+      await browser.setFileDetector(undefined);
+    }
+  }
+
+  public async fillForm(personalInformation: any): Promise<void> {
+    await this.firstName.sendKeys(personalInformation.firstName);
+    await this.lastName.sendKeys(personalInformation.lastName);
+    await this.selectSex(personalInformation.sex);
+    await this.selectExperience(personalInformation.experience);
+    await this.selectProfessions(personalInformation.profession);
+    await this.selectTools(personalInformation.tools);
+    await this.selectCommands(personalInformation.commands);
+    await this.uploadFile(personalInformation.file);
+  }
+
+  public async submit(personalInformation: any): Promise<void> {
+    await this.fillForm(personalInformation);
+    await this.submitBtn.click();
+  }
+
+  public async getResponse(): Promise<string> {
+    return await this.textContainer.getText();
+  }
+
+  public async getFilename(): Promise<string> {
+    return await this.uploadPhoto.getAttribute('value');
   }
 }
